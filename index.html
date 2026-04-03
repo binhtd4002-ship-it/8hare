@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -65,6 +66,7 @@
     .card-tyre{border-top:2px solid var(--yellow)}
     .card-env{border-top:2px solid var(--cyan)}
     .card-gps{border-top:2px solid var(--purple)}
+    .card-car{border-top:2px solid var(--blue)}
 
     /* CARD HEADER */
     .card-header{display:flex;align-items:center;gap:9px;margin-bottom:14px}
@@ -113,8 +115,8 @@
     /* TYRE */
     .tyre-car-wrap{display:flex;align-items:center;gap:6px}
     .tyre-col{display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
-    .tyre-car-mid{flex:1;display:flex;align-items:center;justify-content:center;min-height:80px}
-    .car-svg{opacity:.15;width:56px}
+    .car-svg{opacity:1;width:100%;height:auto}
+    .tyre-car-mid{flex:2;display:flex;align-items:center;justify-content:center;min-height:120px}
     .tyre-cell{background:var(--bg-card-2);border-radius:10px;padding:8px 11px;border:1px solid var(--border);min-width:76px;
       display:flex;flex-direction:column;gap:2px;transition:border-color .3s,box-shadow .3s;position:relative}
     .tyre-cell.ok{border-color:rgba(0,230,118,.35)}
@@ -170,6 +172,11 @@
     /* FOOTER */
     .footer{text-align:center;padding:14px;font-size:11px;color:var(--text-3);border-top:1px solid var(--border);margin-top:2px}
 
+    /* SENTRY MODAL */
+    .sentry-video-wrap { width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; position:relative; display:flex; align-items:center; justify-content:center; }
+    .sentry-video-wrap video { width: 100%; height: 100%; object-fit: cover; }
+    .sentry-status { position: absolute; z-index: 2; color: #fff; font-size: 12px; }
+
     @media(max-width:600px){
       .dashboard{grid-template-columns:1fr;gap:10px;padding:10px}
       .card-full{grid-column:span 1}
@@ -189,6 +196,7 @@
     </div>
   </div>
   <div class="top-right">
+    <button class="icon-btn" onclick="openSentry()" title="Sentry Mode Camera" style="color:var(--red); font-weight:bold;">📸</button>    
     <div class="conn-pill" id="connPill" onclick="openSettings()">
       <div class="dot"></div>
       <span id="connText">Đang kết nối…</span>
@@ -268,19 +276,19 @@
         <div class="stat-value cyan" id="chargingPower">-- <span style="font-size:12px;font-weight:600">kW</span></div>
       </div>
       <div class="stat-item">
+        <div class="stat-label">Công suất HĐ</div>
+        <div class="stat-value orange" id="enginePower">-- <span style="font-size:12px;font-weight:600">kW</span></div>
+      </div>
+      <div class="stat-item">
         <div class="stat-label">Tiêu thụ chuyến</div>
         <div class="stat-value orange" id="totalConsumption">-- <span style="font-size:11px;font-weight:600">kWh</span></div>
       </div>
       <div class="stat-item">
-        <div class="stat-label">Công suất</div>
-        <div class="stat-value orange" id="enginePower">-- <span style="font-size:12px;font-weight:600">kW</span></div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-label">Vòng tua</div>
-        <div class="stat-value orange" id="engineSpeed">-- <span style="font-size:12px;font-weight:600">rpm</span></div>
+        <div class="stat-label">Nhiệt độ ngoài trời</div>
+        <div class="stat-value cyan" id="outdoorTemp">-- <span style="font-size:12px;font-weight:600">°C</span></div>
       </div>
       <div class="stat-item" style="grid-column: span 2">
-        <div class="stat-label">Thời gian sạc còn</div>
+        <div class="stat-label">⏱ Thời gian sạc còn lại</div>
         <div class="stat-value cyan" id="chargingTime">--</div>
       </div>
     </div>
@@ -301,13 +309,6 @@
         </div>
       </div>
       <div class="s-pill">
-        <div class="s-pill-icon">🚪</div>
-        <div class="s-pill-info">
-          <div class="s-pill-label">Cửa</div>
-          <div class="s-pill-value blue" id="doors">--</div>
-        </div>
-      </div>
-      <div class="s-pill">
         <div class="s-pill-icon">🌡️</div>
         <div class="s-pill-info">
           <div class="s-pill-label">Nhiệt độ AC</div>
@@ -315,41 +316,21 @@
         </div>
       </div>
       <div class="s-pill">
-        <div class="s-pill-icon">🪟</div>
+        <div class="s-pill-icon">⚙️</div>
         <div class="s-pill-info">
-          <div class="s-pill-label">Cửa sổ trời</div>
-          <div class="s-pill-value purple" id="windowPercent">--</div>
-        </div>
-      </div>
-      <div class="s-pill">
-        <div class="s-pill-icon">🚪</div>
-        <div class="s-pill-info">
-          <div class="s-pill-label">Cốp sau</div>
-          <div class="s-pill-value blue" id="backdoorStatus">--</div>
-        </div>
-      </div>
-      <div class="s-pill">
-        <div class="s-pill-icon">📐</div>
-        <div class="s-pill-info">
-          <div class="s-pill-label">Độ dốc</div>
-          <div class="s-pill-value green" id="slope">--°</div>
-        </div>
-      </div>
-      <div class="s-pill">
-        <div class="s-pill-icon">💡</div>
-        <div class="s-pill-info">
-          <div class="s-pill-label">Đèn xe</div>
-          <div class="s-pill-value yellow" id="turnLight">--</div>
+          <div class="s-pill-label">Chế độ vận hành</div>
+          <div class="s-pill-value purple" id="operationModeStatus">--</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TYRE -->
+  <!-- TYRE (bao gồm mô hình xe + trạng thái cửa) -->
   <div class="card card-tyre card-full">
     <div class="card-header">
       <div class="card-icon">🛞</div>
-      <div class="card-title">Áp suất lốp</div>
+      <div class="card-title">Lốp xe — Áp suất & Nhiệt độ</div>
+      <div id="doorBadge" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.35)">✅ Đóng hết</div>
       <div id="tyreBadge" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;border:1px solid;
         background:rgba(0,230,118,.12);color:var(--green);border-color:rgba(0,230,118,.35)">Đang chờ</div>
     </div>
@@ -360,21 +341,60 @@
           <div class="tyre-pos">T. Trái</div>
           <div class="tyre-val unknown" id="tfl-val">--</div>
           <div class="tyre-unit">kPa</div>
+          <div style="font-size:10px;color:var(--text-2);margin-top:3px">🌡 <span id="tfl-temp">--</span>°C</div>
         </div>
         <div class="tyre-cell" id="tyre-rl">
           <span class="tyre-warn-icon">⚠️</span>
           <div class="tyre-pos">S. Trái</div>
           <div class="tyre-val unknown" id="trl-val">--</div>
           <div class="tyre-unit">kPa</div>
+          <div style="font-size:10px;color:var(--text-2);margin-top:3px">🌡 <span id="trl-temp">--</span>°C</div>
         </div>
       </div>
       <div class="tyre-car-mid">
-        <svg class="car-svg" viewBox="0 0 80 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="30" width="70" height="100" rx="12" fill="black"/>
-          <rect x="10" y="10" width="60" height="30" rx="8" fill="black"/>
-          <rect x="10" y="120" width="60" height="30" rx="8" fill="black"/>
-          <ellipse cx="20" cy="35" rx="7" ry="5" fill="rgba(0,0,0,.4)"/>
-          <ellipse cx="60" cy="35" rx="7" ry="5" fill="rgba(0,0,0,.4)"/>
+        <svg class="car-svg" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:1">
+          <!-- Thân xe -->
+          <rect x="60" y="70" width="200" height="100" rx="14" fill="#1a1f2e" stroke="#2e3650" stroke-width="1.5"/>
+          <!-- Nóc xe -->
+          <rect x="85" y="38" width="150" height="40" rx="10" fill="#1a1f2e" stroke="#2e3650" stroke-width="1.5"/>
+          <!-- Kính trước -->
+          <rect x="88" y="41" width="68" height="33" rx="6" fill="#1e3a5f" opacity="0.6"/>
+          <!-- Kính sau -->
+          <rect x="164" y="41" width="68" height="33" rx="6" fill="#1e3a5f" opacity="0.6"/>
+          <!-- Đèn trước -->
+          <ellipse cx="68" cy="90" rx="5" ry="7" fill="#FFD700" opacity="0.55"/>
+          <!-- Đèn sau -->
+          <ellipse cx="252" cy="90" rx="5" ry="7" fill="#FF4040" opacity="0.55"/>
+          <!-- Bánh xe -->
+          <circle cx="105" cy="170" r="15" fill="#111" stroke="#444" stroke-width="2"/>
+          <circle cx="105" cy="170" r="8" fill="#222" stroke="#555" stroke-width="1.5"/>
+          <circle cx="215" cy="170" r="15" fill="#111" stroke="#444" stroke-width="2"/>
+          <circle cx="215" cy="170" r="8" fill="#222" stroke="#555" stroke-width="1.5"/>
+          <!-- Indicator cửa FL -->
+          <g id="door-indicator-fl">
+            <rect x="62" y="80" width="7" height="48" rx="3" fill="#00C853" opacity="0.9"/>
+            <text x="65" y="107" font-size="7" fill="white" text-anchor="middle" font-weight="bold">FL</text>
+          </g>
+          <!-- Indicator cửa RL -->
+          <g id="door-indicator-rl">
+            <rect x="62" y="132" width="7" height="28" rx="3" fill="#00C853" opacity="0.9"/>
+            <text x="65" y="149" font-size="7" fill="white" text-anchor="middle" font-weight="bold">RL</text>
+          </g>
+          <!-- Indicator cửa FR -->
+          <g id="door-indicator-fr">
+            <rect x="251" y="80" width="7" height="48" rx="3" fill="#00C853" opacity="0.9"/>
+            <text x="255" y="107" font-size="7" fill="white" text-anchor="middle" font-weight="bold">FR</text>
+          </g>
+          <!-- Indicator cửa RR -->
+          <g id="door-indicator-rr">
+            <rect x="251" y="132" width="7" height="28" rx="3" fill="#00C853" opacity="0.9"/>
+            <text x="255" y="149" font-size="7" fill="white" text-anchor="middle" font-weight="bold">RR</text>
+          </g>
+          <!-- Label trạng thái cửa -->
+          <text id="lbl-fl" x="35" y="107" font-size="8" fill="#00C853" font-weight="700" text-anchor="middle">Đóng</text>
+          <text id="lbl-rl" x="35" y="149" font-size="8" fill="#00C853" font-weight="700" text-anchor="middle">Đóng</text>
+          <text id="lbl-fr" x="285" y="107" font-size="8" fill="#00C853" font-weight="700" text-anchor="middle">Đóng</text>
+          <text id="lbl-rr" x="285" y="149" font-size="8" fill="#00C853" font-weight="700" text-anchor="middle">Đóng</text>
         </svg>
       </div>
       <div class="tyre-col">
@@ -383,12 +403,14 @@
           <div class="tyre-pos">T. Phải</div>
           <div class="tyre-val unknown" id="tfr-val">--</div>
           <div class="tyre-unit">kPa</div>
+          <div style="font-size:10px;color:var(--text-2);margin-top:3px">🌡 <span id="tfr-temp">--</span>°C</div>
         </div>
         <div class="tyre-cell" id="tyre-rr">
           <span class="tyre-warn-icon">⚠️</span>
           <div class="tyre-pos">S. Phải</div>
           <div class="tyre-val unknown" id="trr-val">--</div>
           <div class="tyre-unit">kPa</div>
+          <div style="font-size:10px;color:var(--text-2);margin-top:3px">🌡 <span id="trr-temp">--</span>°C</div>
         </div>
       </div>
     </div>
@@ -420,10 +442,6 @@
       <div class="env-item">
         <div class="env-label">Phanh</div>
         <div class="env-value red" id="brakeDeepness">--%</div>
-      </div>
-      <div class="env-item">
-        <div class="env-label">Chế độ vận hành</div>
-        <div class="env-value purple" id="operationMode">--</div>
       </div>
     </div>
   </div>
@@ -461,6 +479,32 @@
   </div>
 </div>
 
+<!-- SENTRY MODAL -->
+<div class="modal" id="sentryModal">
+  <div class="modal-box" style="width:min(600px,94vw);">
+    <div class="modal-title">🛡️ Sentry Mode - Live Camera</div>
+    <div class="modal-field">
+      <label>Camera Kênh (ID)</label>
+      <select id="camSelect" style="width:100%;background:var(--bg-card-2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--text-1);font-size:14px;outline:none;">
+        <option value="0">Camera ID 0</option>
+        <option value="1">Camera ID 1</option>
+        <option value="2">Camera ID 2</option>
+        <option value="3">Camera ID 3</option>
+        <option value="4">Camera ID 4</option>
+      </select>
+    </div>
+    <div class="sentry-video-wrap">
+      <div class="sentry-status" id="sentryStatusText">Chờ kết nối...</div>
+      <div id="videoLogArea" style="position: absolute; top: 10px; left: 10px; z-index: 3; width: 95%; max-height: 90%; overflow-y: auto; pointer-events: none; text-align: left;"></div>
+      <video id="sentryVideo" autoplay playsinline></video>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeSentry()">Đóng</button>
+      <button class="btn btn-primary" id="btnStartSentry" onclick="startSentry()">▶ Bật Luồng</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── STATE ──
 let mqttClient = null;
@@ -469,6 +513,10 @@ let marker = null;
 let followCar = true;
 let lat = null, lng = null;
 let heartbeatTimer = null;
+
+// ── WEBRTC STATE ──
+let pc = null;
+const webrtcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
 // ── LEAFLET MAP ──
 function initMap() {
@@ -541,8 +589,10 @@ function connectMqtt() {
   mqttClient.on('connect', () => {
     setConn('connected');
     mqttClient.subscribe(topic);
-    // Heartbeat 25s — giữ WakeLock xe (45s) không bị hết hiệu lực
-    // Xóa interval cũ trước (nếu có) để tránh nhiều setInterval chạy song song sau reconnect
+    mqttClient.subscribe('8hare/SENTRY/webrtc/answer');
+    mqttClient.subscribe('8hare/SENTRY/webrtc/candidate');
+    mqttClient.subscribe('8hare/SENTRY/webrtc/log');
+
     if (heartbeatTimer) clearInterval(heartbeatTimer);
     heartbeatTimer = setInterval(() => {
       if (mqttClient && mqttClient.connected) {
@@ -553,7 +603,20 @@ function connectMqtt() {
   mqttClient.on('error', (e) => { console.error(e); setConn('error'); });
   mqttClient.on('close', () => setConn('error'));
   mqttClient.on('message', (t, payload) => {
-    try { updateDashboard(JSON.parse(payload.toString())); } catch(e){}
+    try { 
+      const data = JSON.parse(payload.toString());
+      if (t === '8hare/SENTRY/webrtc/answer') {
+        if (pc) pc.setRemoteDescription(new RTCSessionDescription(data));
+      } else if (t === '8hare/SENTRY/webrtc/candidate') {
+        if (pc) pc.addIceCandidate(new RTCIceCandidate({ sdpMid: data.sdpMid, sdpMLineIndex: data.sdpMLineIndex, candidate: data.candidate }));
+      } else if (t === '8hare/SENTRY/webrtc/log') {
+        console.log("CAR LOG: ", data.msg);
+        const logArea = document.getElementById('videoLogArea');
+        if (logArea) logArea.innerHTML += `<div style="color:#ffae42; font-size:12px; margin-top: 5px; text-shadow: 1px 1px 2px #000; font-family: monospace;">> ${data.msg}</div>`;
+      } else if (t === topic) {
+        updateDashboard(data); 
+      }
+    } catch(e){}
   });
 }
 
@@ -564,6 +627,50 @@ function setConn(state) {
   if (state === 'connected')   t.textContent = 'Đã kết nối';
   else if (state === 'error')  t.textContent = 'Mất kết nối';
   else                          t.textContent = 'Đang kết nối…';
+}
+
+// ── OPERATION MODE LABEL ──
+function operationModeLabel(val) {
+  const mode = parseInt(val);
+  if (isNaN(mode) || val === '--') return '--';
+  const map = {0:'ECO',1:'Normal',2:'Sport',3:'Snow',4:'Sand',5:'Mud',6:'Sport+'};
+  return map[mode] !== undefined ? map[mode] : ('Mode '+mode);
+}
+
+// ── CAR MODEL DOOR UPDATE ──
+function updateCarDoor(side, state) {
+  // side: 'fl','fr','rl','rr'
+  // state: 1=open, 0=closed, -1=unknown
+  const ind = document.getElementById('door-indicator-' + side);
+  const lbl = document.getElementById('lbl-' + side);
+  if (!ind || !lbl) return;
+  const rect = ind.querySelector('rect');
+  if (state === 1) {
+    if(rect) rect.setAttribute('fill','#FF6D00');
+    lbl.setAttribute('fill','#FF6D00');
+    lbl.textContent = 'Mở';
+  } else if (state === 0) {
+    if(rect) rect.setAttribute('fill','#00C853');
+    lbl.setAttribute('fill','#00C853');
+    lbl.textContent = 'Đóng';
+  } else {
+    if(rect) rect.setAttribute('fill','#888');
+    lbl.setAttribute('fill','#888');
+    lbl.textContent = '--';
+  }
+}
+
+function updateDoorBadge(fl, fr, rl, rr) {
+  const badge = document.getElementById('doorBadge');
+  if (!badge) return;
+  const anyOpen = [fl,fr,rl,rr].some(s => s === 1);
+  if (anyOpen) {
+    badge.textContent = '🔓 Có cửa mở';
+    badge.style.cssText = 'font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(255,109,0,.15);color:var(--orange);border:1px solid rgba(255,109,0,.4)';
+  } else {
+    badge.textContent = '✅ Đóng hết';
+    badge.style.cssText = 'font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.35)';
+  }
 }
 
 // ── DASHBOARD UPDATE ──
@@ -586,25 +693,29 @@ function updateDashboard(d) {
   setFmt('odometer', d.odometer, ' km');
   setFmt('chargingPower', d.charging_power, ' kW');
   setFmt('totalConsumption', d.total_consumption, ' kWh');
+  setFmt('outdoorTemp', d.outdoor_temp, ' °C');
 
   // ENGINE
   setFmt('speed', d.speed, ' km/h');
   setFmt('enginePower', d.engine_power, ' kW');
-  setFmt('engineSpeed', d.engine_speed, ' rpm');
   set('chargingTime', d.charging_time || '--');
 
   // STATUS
   set('gear', d.gear || '--');
-  set('doors', d.doors || '--');
   const acT = d.ac_temp;
   set('acTemp', (acT && acT !== '--') ? acT + '°C' : '--°C');
-  // window_percent: Java đã gắn '%' sẵn (vd: "50%") hoặc "--"
-  set('windowPercent', d.window_percent || '--');
-  // backdoor_status: trạng thái cốp sau (tách riêng từ windowPercent)
-  set('backdoorStatus', d.backdoor_status || '--');
-  const slp = d.slope;
-  set('slope', (slp && slp !== '--') ? slp + '°' : '--°');
-  set('turnLight', d.turn_light || '--');
+  set('operationModeStatus', operationModeLabel(d.operation_mode));
+
+  // CAR MODEL DOORS
+  const dfl = parseInt(d.door_state_fl);
+  const dfr = parseInt(d.door_state_fr);
+  const drl = parseInt(d.door_state_rl);
+  const drr = parseInt(d.door_state_rr);
+  updateCarDoor('fl', isNaN(dfl) ? -1 : dfl);
+  updateCarDoor('fr', isNaN(dfr) ? -1 : dfr);
+  updateCarDoor('rl', isNaN(drl) ? -1 : drl);
+  updateCarDoor('rr', isNaN(drr) ? -1 : drr);
+  updateDoorBadge(dfl, dfr, drl, drr);
 
   // TYRE
   updateTyre('tyre-fl','tfl-val', d.tyre_fl);
@@ -612,6 +723,11 @@ function updateDashboard(d) {
   updateTyre('tyre-rl','trl-val', d.tyre_rl);
   updateTyre('tyre-rr','trr-val', d.tyre_rr);
   updateTyreBadge([d.tyre_fl, d.tyre_fr, d.tyre_rl, d.tyre_rr]);
+  // Tyre temperature
+  setTemp('tfl-temp', d.tyre_temp_fl);
+  setTemp('tfr-temp', d.tyre_temp_fr);
+  setTemp('trl-temp', d.tyre_temp_rl);
+  setTemp('trr-temp', d.tyre_temp_rr);
 
   // ENV
   setFmt('pm2p5In',  d.pm2p5_in,  ' µg');
@@ -622,7 +738,6 @@ function updateDashboard(d) {
   set('accelDeepness', (acc && acc !== '--') ? acc + '%' : '--%');
   const brk = d.brake_deepness;
   set('brakeDeepness', (brk && brk !== '--') ? brk + '%' : '--%');
-  set('operationMode', d.operation_mode || '--');
 
   // MODE TAG
   document.getElementById('modeTag').textContent = d.emulator_mode ? 'SIM' : 'SDK';
@@ -647,6 +762,12 @@ function updateDashboard(d) {
     const timeStr = carDate.toLocaleTimeString('vi-VN', { hour12: false });
     document.getElementById('carTimeVal').textContent = timeStr;
   }
+}
+
+function setTemp(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = (val !== undefined && val !== null && val !== '' && val !== '--') ? val : '--';
 }
 
 function set(id, val) {
@@ -698,6 +819,90 @@ function updateTyreBadge(vals) {
   } else {
     badge.textContent = '✅ Bình thường';
     badge.style.cssText = 'font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.35)';
+  }
+}
+
+// ── SENTRY WEBRTC LOGIC ──
+function openSentry() { document.getElementById('sentryModal').classList.add('open'); }
+function closeSentry() { 
+  document.getElementById('sentryModal').classList.remove('open');
+  stopSentry();
+}
+
+function setSentryStatus(text) {
+  const el = document.getElementById('sentryStatusText');
+  if (el) { el.textContent = text; el.style.display = text ? 'block' : 'none'; }
+}
+
+async function startSentry() {
+  if (pc) { stopSentry(); }
+  if (!mqttClient || !mqttClient.connected) {
+    alert("Chưa kết nối tới xe, vui lòng đợi!"); return;
+  }
+  
+  setSentryStatus('Đang tạo đường truyền...');
+  document.getElementById('btnStartSentry').textContent = '⏹ Tắt Luồng';
+  document.getElementById('btnStartSentry').onclick = stopSentry;
+  document.getElementById('sentryVideo').srcObject = null;
+
+  try {
+    pc = new RTCPeerConnection(webrtcConfig);
+    
+    // Yêu cầu nhận Video
+    pc.addTransceiver('video', { direction: 'recvonly' });
+
+    pc.onicecandidate = (e) => {
+      if (e.candidate && mqttClient) {
+        const iceData = {
+          sdpMid: e.candidate.sdpMid,
+          sdpMLineIndex: e.candidate.sdpMLineIndex,
+          candidate: e.candidate.candidate
+        };
+        mqttClient.publish('8hare/SENTRY/webrtc/candidate', JSON.stringify(iceData));
+      }
+    };
+
+    pc.oniceconnectionstatechange = () => {
+      if(pc.iceConnectionState === 'connected') {
+        setSentryStatus('');
+      } else if(['failed', 'disconnected', 'closed'].includes(pc.iceConnectionState)) {
+        setSentryStatus('Mất kết nối Camera');
+      }
+    };
+
+    pc.ontrack = (event) => {
+      if (event.streams && event.streams[0]) {
+        document.getElementById('sentryVideo').srcObject = event.streams[0];
+        setSentryStatus(''); // ẩn chữ
+      }
+    };
+
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+
+    const cameraId = parseInt(document.getElementById('camSelect').value, 10);
+    const offerPayload = {
+      type: offer.type,
+      sdp: offer.sdp,
+      cameraId: cameraId
+    };
+    mqttClient.publish('8hare/SENTRY/webrtc/offer', JSON.stringify(offerPayload));
+
+  } catch(e) {
+    console.error(e);
+    setSentryStatus('Lỗi: ' + e.message);
+  }
+}
+
+function stopSentry() {
+  if (pc) { pc.close(); pc = null; }
+  document.getElementById('sentryVideo').srcObject = null;
+  setSentryStatus('Đã ngắt');
+  document.getElementById('btnStartSentry').textContent = '▶ Bật Luồng';
+  document.getElementById('btnStartSentry').onclick = startSentry;
+
+  if (mqttClient && mqttClient.connected) {
+    mqttClient.publish('8hare/SENTRY/webrtc/stop', '{}');
   }
 }
 

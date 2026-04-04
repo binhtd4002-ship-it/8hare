@@ -90,7 +90,7 @@
     .soc-unit{font-size:14px;font-weight:600;color:var(--text-2);margin-left:2px}
 
     /* SOH */
-    .soh-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .soh-row{display:none;align-items:center;gap:10px;margin-bottom:10px}
     .soh-label{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;min-width:60px}
     .soh-track{flex:1;height:7px;background:var(--bg-card-2);border-radius:var(--pill);overflow:hidden}
     .soh-fill{height:100%;width:0%;border-radius:var(--pill);transition:width .9s,background .5s}
@@ -257,6 +257,22 @@
         <div class="stat-label">Tốc độ</div>
         <div class="stat-value yellow" id="speed">-- <span style="font-size:12px;font-weight:600">km/h</span></div>
       </div>
+      <div class="stat-item">
+        <div class="stat-label">Số</div>
+        <div class="stat-value orange" id="gear">--</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Chế độ lái</div>
+        <div class="stat-value purple" id="operationModeStatus">--</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Tổng tiêu thụ</div>
+        <div class="stat-value purple" id="totalConsumption">-- <span style="font-size:11px;font-weight:600">kWh</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Nhiệt độ ngoài trời</div>
+        <div class="stat-value cyan" id="outdoorTemp">-- <span style="font-size:12px;font-weight:600">°C</span></div>
+      </div>
       <div class="stat-item" style="grid-column: span 2">
         <div class="stat-label">Tầm EV</div>
         <div class="stat-value green" id="evRange">--<span style="font-size:12px;font-weight:600"> km</span></div>
@@ -264,63 +280,46 @@
     </div>
   </div>
 
-  <!-- ENERGY SPECS -->
-  <div class="card card-engine">
+  <!-- CHARGING SPECS -->
+  <div class="card card-status">
     <div class="card-header">
       <div class="card-icon">⚡</div>
-      <div class="card-title">Thông số năng lượng</div>
+      <div class="card-title">Thông số sạc</div>
     </div>
     <div class="stat-grid">
       <div class="stat-item">
         <div class="stat-label">Công suất sạc</div>
-        <div class="stat-value cyan" id="chargingPower">-- <span style="font-size:12px;font-weight:600">kW</span></div>
+        <div class="stat-value green" id="chargingPower">-- <span style="font-size:12px;font-weight:600">kW</span></div>
       </div>
       <div class="stat-item">
-        <div class="stat-label">Công suất HĐ</div>
+        <div class="stat-label">Công suất động cơ</div>
         <div class="stat-value orange" id="enginePower">-- <span style="font-size:12px;font-weight:600">kW</span></div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-label">Tiêu thụ chuyến</div>
-        <div class="stat-value orange" id="totalConsumption">-- <span style="font-size:11px;font-weight:600">kWh</span></div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-label">Nhiệt độ ngoài trời</div>
-        <div class="stat-value cyan" id="outdoorTemp">-- <span style="font-size:12px;font-weight:600">°C</span></div>
       </div>
       <div class="stat-item" style="grid-column: span 2">
         <div class="stat-label">⏱ Thời gian sạc còn lại</div>
-        <div class="stat-value cyan" id="chargingTime">--</div>
+        <div class="stat-value green" id="chargingTime">--</div>
       </div>
     </div>
   </div>
 
-  <!-- STATUS -->
-  <div class="card card-status card-full">
+  <!-- TRIP SPECS -->
+  <div class="card card-engine">
     <div class="card-header">
-      <div class="card-icon">🚗</div>
-      <div class="card-title">Trạng thái xe</div>
+      <div class="card-icon">🛣️</div>
+      <div class="card-title">Thông số chuyến</div>
     </div>
-    <div class="status-row">
-      <div class="s-pill">
-        <div class="s-pill-icon">🔢</div>
-        <div class="s-pill-info">
-          <div class="s-pill-label">Số</div>
-          <div class="s-pill-value orange" id="gear">--</div>
-        </div>
+    <div class="stat-grid">
+      <div class="stat-item">
+        <div class="stat-label">Tiêu thụ chuyến</div>
+        <div class="stat-value orange" id="tripConsumption">-- <span style="font-size:11px;font-weight:600">kWh</span></div>
       </div>
-      <div class="s-pill">
-        <div class="s-pill-icon">🌡️</div>
-        <div class="s-pill-info">
-          <div class="s-pill-label">Nhiệt độ AC</div>
-          <div class="s-pill-value cyan" id="acTemp">--°C</div>
-        </div>
+      <div class="stat-item">
+        <div class="stat-label">Quãng đường</div>
+        <div class="stat-value cyan" id="tripMileage">-- <span style="font-size:12px;font-weight:600">km</span></div>
       </div>
-      <div class="s-pill">
-        <div class="s-pill-icon">⚙️</div>
-        <div class="s-pill-info">
-          <div class="s-pill-label">Chế độ vận hành</div>
-          <div class="s-pill-value purple" id="operationModeStatus">--</div>
-        </div>
+      <div class="stat-item" style="grid-column: span 2">
+        <div class="stat-label">Thời gian chạy</div>
+        <div class="stat-value cyan" id="tripTime">-- <span style="font-size:12px;font-weight:600">giờ</span></div>
       </div>
     </div>
   </div>
@@ -341,14 +340,12 @@
           <div class="tyre-pos">T. Trái</div>
           <div class="tyre-val unknown" id="tfl-val">--</div>
           <div class="tyre-unit">kPa</div>
-          <div style="font-size:10px;color:var(--text-2);margin-top:3px">🌡 <span id="tfl-temp">--</span>°C</div>
         </div>
         <div class="tyre-cell" id="tyre-rl">
           <span class="tyre-warn-icon">⚠️</span>
           <div class="tyre-pos">S. Trái</div>
           <div class="tyre-val unknown" id="trl-val">--</div>
           <div class="tyre-unit">kPa</div>
-          <div style="font-size:10px;color:var(--text-2);margin-top:3px">🌡 <span id="trl-temp">--</span>°C</div>
         </div>
       </div>
       <div class="tyre-car-mid">
@@ -403,50 +400,19 @@
           <div class="tyre-pos">T. Phải</div>
           <div class="tyre-val unknown" id="tfr-val">--</div>
           <div class="tyre-unit">kPa</div>
-          <div style="font-size:10px;color:var(--text-2);margin-top:3px">🌡 <span id="tfr-temp">--</span>°C</div>
         </div>
         <div class="tyre-cell" id="tyre-rr">
           <span class="tyre-warn-icon">⚠️</span>
           <div class="tyre-pos">S. Phải</div>
           <div class="tyre-val unknown" id="trr-val">--</div>
           <div class="tyre-unit">kPa</div>
-          <div style="font-size:10px;color:var(--text-2);margin-top:3px">🌡 <span id="trr-temp">--</span>°C</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ENVIRONMENT -->
-  <div class="card card-env card-full">
-    <div class="card-header">
-      <div class="card-icon">🌿</div>
-      <div class="card-title">Môi trường & Cảm biến</div>
-    </div>
-    <div class="env-grid">
-      <div class="env-item">
-        <div class="env-label">PM2.5 Trong</div>
-        <div class="env-value cyan" id="pm2p5In">-- <span style="font-size:10px">µg</span></div>
-      </div>
-      <div class="env-item">
-        <div class="env-label">PM2.5 Ngoài</div>
-        <div class="env-value cyan" id="pm2p5Out">-- <span style="font-size:10px">µg</span></div>
-      </div>
-      <div class="env-item">
-        <div class="env-label">Góc vô lăng</div>
-        <div class="env-value yellow" id="steeringAngle">--°</div>
-      </div>
-      <div class="env-item">
-        <div class="env-label">Ga</div>
-        <div class="env-value orange" id="accelDeepness">--%</div>
-      </div>
-      <div class="env-item">
-        <div class="env-label">Phanh</div>
-        <div class="env-value red" id="brakeDeepness">--%</div>
-      </div>
-    </div>
-  </div>
-
 </div>
+
 
 <div class="footer">
   8hare v2.1 — BYD SDK Proxy Listener — Cập nhật: <span id="lastUpdate">--</span>
@@ -693,6 +659,9 @@ function updateDashboard(d) {
   setFmt('odometer', d.odometer, ' km');
   setFmt('chargingPower', d.charging_power, ' kW');
   setFmt('totalConsumption', d.total_consumption, ' kWh');
+  setFmt('tripConsumption', d.trip_consumption, ' kWh');
+  setFmt('tripMileage', d.trip_mileage, ' km');
+  setFmt('tripTime', d.trip_time, ' giờ');
   setFmt('outdoorTemp', d.outdoor_temp, ' °C');
 
   // ENGINE
@@ -702,8 +671,6 @@ function updateDashboard(d) {
 
   // STATUS
   set('gear', d.gear || '--');
-  const acT = d.ac_temp;
-  set('acTemp', (acT && acT !== '--') ? acT + '°C' : '--°C');
   set('operationModeStatus', operationModeLabel(d.operation_mode));
 
   // CAR MODEL DOORS
@@ -723,22 +690,6 @@ function updateDashboard(d) {
   updateTyre('tyre-rl','trl-val', d.tyre_rl);
   updateTyre('tyre-rr','trr-val', d.tyre_rr);
   updateTyreBadge([d.tyre_fl, d.tyre_fr, d.tyre_rl, d.tyre_rr]);
-  // Tyre temperature
-  setTemp('tfl-temp', d.tyre_temp_fl);
-  setTemp('tfr-temp', d.tyre_temp_fr);
-  setTemp('trl-temp', d.tyre_temp_rl);
-  setTemp('trr-temp', d.tyre_temp_rr);
-
-  // ENV
-  setFmt('pm2p5In',  d.pm2p5_in,  ' µg');
-  setFmt('pm2p5Out', d.pm2p5_out, ' µg');
-  const sa = d.steering_angle;
-  set('steeringAngle', (sa && sa !== '--') ? sa + '°' : '--°');
-  const acc = d.accel_deepness;
-  set('accelDeepness', (acc && acc !== '--') ? acc + '%' : '--%');
-  const brk = d.brake_deepness;
-  set('brakeDeepness', (brk && brk !== '--') ? brk + '%' : '--%');
-
   // MODE TAG
   document.getElementById('modeTag').textContent = d.emulator_mode ? 'SIM' : 'SDK';
 
@@ -762,12 +713,6 @@ function updateDashboard(d) {
     const timeStr = carDate.toLocaleTimeString('vi-VN', { hour12: false });
     document.getElementById('carTimeVal').textContent = timeStr;
   }
-}
-
-function setTemp(id, val) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = (val !== undefined && val !== null && val !== '' && val !== '--') ? val : '--';
 }
 
 function set(id, val) {

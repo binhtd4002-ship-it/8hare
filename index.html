@@ -561,8 +561,11 @@
             <div class="user-cell">
               <img src="${u.photoURL || 'https://ui-avatars.com/api/?name='+encodeURI(u.displayName||'U')+'&background=2962ff&color=fff'}" class="avatar">
               <div>
-                <div class="user-name">${u.displayName || 'Bấm F5 WebClient'}</div>
-                <div class="user-email">${u.email || u.uid}</div>
+                <div class="user-name">${u.displayName || 'Khách (Chưa vào web)'}</div>
+                <div class="user-email" style="display:flex;flex-direction:column;gap:2px;">
+                   <span>${u.email ? '✉️ ' + u.email : '✉️ (Chưa lấy được Email)'}</span>
+                   <span style="font-size:10px; font-family:monospace; color:var(--text-3)">ID: ${u.uid}</span>
+                </div>
               </div>
             </div>
           </td>

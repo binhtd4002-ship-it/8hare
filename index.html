@@ -421,12 +421,35 @@
 
       auth.onAuthStateChanged(user => {
         if(user) {
-          document.getElementById('loginOverlay').style.display = 'none';
-          document.getElementById('sidebar').style.display = 'flex';
-          document.getElementById('mainApp').style.display = 'flex';
-          document.getElementById('adminAvatar').src = user.photoURL;
-          
-          startRealtimeSync();
+          // KIỂM TRA QUYỀN ADMIN TỪ FIRESTORE
+          db.collection('admin').doc('settings').get().then(doc => {
+            let isAdmin = false;
+            if (doc.exists) {
+              const admins = doc.data().admin_emails || [];
+              if (admins.includes(user.email)) isAdmin = true;
+            }
+
+            // (Fallback khẩn cấp nếu db chưa thiết lập)
+            // Thay bằng email của bạn hoặc tạo field admin_emails trên Firestore trước.
+            if (!isAdmin && user.email === 'nhap.email.cua.ban@gmail.com') isAdmin = true;
+
+            if (!isAdmin) {
+               alert("Tài khoản " + user.email + " không có quyền Quản Trị Hệ Thống. Vui lòng thêm email này vào mảng admin_emails trong admin/settings trên Firestore.");
+               auth.signOut();
+               return;
+            }
+
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'flex';
+            document.getElementById('adminAvatar').src = user.photoURL;
+            
+            startRealtimeSync();
+
+          }).catch(err => {
+            alert("Không thể kiểm tra quyền Admin: " + err.message);
+            auth.signOut();
+          });
         } else {
           document.getElementById('loginOverlay').style.display = 'flex';
           document.getElementById('sidebar').style.display = 'none';

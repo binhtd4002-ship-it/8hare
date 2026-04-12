@@ -578,10 +578,26 @@
       });
     }
 
-    function updateTier(uid, newTier) {
-       db.collection('users').doc(uid).update({tier: newTier}).then(() => {
-          // Toast or ignore as onSnapshot updates UI immediately
-       });
+    async function updateTier(uid, newTier) {
+       try {
+           // 1. Cập nhật Tier cho User (Source of truth)
+           await db.collection('users').doc(uid).update({tier: newTier}).catch(() => {
+               db.collection('users').doc(uid).set({tier: newTier}, {merge: true});
+           });
+           
+           // 2. Đồng bộ tự động (Push-Sync) thẳng xuống xe để qua mặt rào cản Auth
+           const user = window.allUsers.find(u => u.uid === uid);
+           if (user && user.vehicles && user.vehicles.length > 0) {
+               for (let v of user.vehicles) {
+                   if (v.id) {
+                       await db.collection("vehicles").doc(v.id).set({ tier: newTier }, { merge: true });
+                   }
+               }
+           }
+           console.log("Đã đồng bộ Tier vắt chéo server thành công cho tài khoản:", uid);
+       } catch (err) {
+           alert("Lỗi khi đồng bộ gói xe: " + err.message);
+       }
     }
     function setBan(uid, banStatus) {
        if (banStatus && !confirm("Chắc chắn khóa người dùng này? Họ sẽ bị đá văng khỏi Web.")) return;

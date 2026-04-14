@@ -536,7 +536,16 @@
 
         // CARS
         const vCount = u.vehicles ? u.vehicles.length : 0;
-        let carsHtml = `<span style="font-weight:600">${vCount} xe</span>`;
+        let carsHtml = `<div style="font-weight:600; margin-bottom: 4px;">${vCount} xe</div>`;
+        if (vCount > 0) {
+           carsHtml += `<div style="font-size: 11px; color: var(--text-2); display: flex; flex-direction: column; gap: 4px;">`;
+           u.vehicles.forEach(v => {
+              const vName = v.name || v.model || 'Xe ẩn danh';
+              const vId = v.id || 'N/A';
+              carsHtml += `<div>- <b style="color: var(--text-1)">${vName}</b> <br><span style="font-family:monospace; font-size:10px; color:var(--text-3)">ID: ${vId}</span></div>`;
+           });
+           carsHtml += `</div>`;
+        }
 
         // ACTIONS
         let actionHtml = '';
